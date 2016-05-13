@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MaterialButton">
+        <attr name="up" format="boolean"></attr>
+        <attr name="mcolor" format="color"></attr>
+        <attr name="RectColor" format="color"></attr>
+    </declare-styleable>
+</resources>

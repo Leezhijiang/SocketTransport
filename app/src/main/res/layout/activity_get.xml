@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="top.jjust.sockettransport.GetActivity">
+    <TextView
+        android:gravity="center"
+        android:id="@+id/get_process_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0%"/>
+    <TextView
+        android:gravity="center"
+        android:id="@+id/get_state_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="正在开启连接"/>
+    <TextView
+        android:gravity="center"
+        android:id="@+id/get_file_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="尚未选择文件"/>
+
+</LinearLayout>
