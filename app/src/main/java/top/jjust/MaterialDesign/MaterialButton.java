@@ -71,6 +71,11 @@ public class MaterialButton extends View{
         Animation anim = new TranslateAnimation(getX(),getX(),getY(),getY()-getHeight());
         anim.setDuration(1000);
         startAnimation(anim);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return super.onTouchEvent(event);
     }
 
