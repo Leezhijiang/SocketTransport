@@ -2,6 +2,7 @@ package top.jjust.MaterialDesign;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.IntentSender;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -55,9 +56,9 @@ public class MaterialButton extends View{
                     rectColor = ta.getColor(i,Color.BLACK);
                     break;
             }
-        }
-        initButton();
     }
+    initButton();
+}
 
     /**
      * 初始化方法
@@ -66,19 +67,39 @@ public class MaterialButton extends View{
         p.setAntiAlias(true);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Animation anim = new TranslateAnimation(getX(),getX(),getY(),getY()-getHeight());
-        anim.setDuration(1000);
-        startAnimation(anim);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return super.onTouchEvent(event);
-    }
 
+    @Override
+    public boolean onTouchEvent(final MotionEvent event) {
+        Animation anim;
+        if(up) {
+            anim = new TranslateAnimation(0, 0, 0,  - getHeight());
+        }else {
+            Loger.takeLog("!up anim");
+            anim = new TranslateAnimation(0,0, 0,getHeight());
+        }
+        anim.setDuration(200);
+        anim.setFillAfter(true);
+        startAnimation(anim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                callOnClick();
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        return false;
+    }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
