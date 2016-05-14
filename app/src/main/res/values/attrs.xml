@@ -5,4 +5,10 @@
         <attr name="mcolor" format="color"></attr>
         <attr name="RectColor" format="color"></attr>
     </declare-styleable>
+    <declare-styleable name="MaterialSwitch">
+        <attr name="uColor" format="color"></attr>
+        <attr name="dColor" format="color"></attr>
+        <attr name="uText" format="string"></attr>
+        <attr name="dText" format="string"></attr>
+    </declare-styleable>
 </resources>

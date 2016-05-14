@@ -71,7 +71,7 @@ public class GetActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            while (WifiManager.WIFI_STATE_ENABLED != wifiManager.getWifiState()) {
+            while (WifiManager.WIFI_STATE_ENABLED != wifiManager.getWifiState()&&!exit) {
                 try {
                     Loger.takeLog("jiance300");
                     Thread.sleep(300);
@@ -97,7 +97,7 @@ public class GetActivity extends AppCompatActivity {
 //                e.printStackTrace();
 //            }
 //            Loger.takeLog("已经链接socket");
-            while(!connSocket()){
+            while(!connSocket()&&!exit){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
