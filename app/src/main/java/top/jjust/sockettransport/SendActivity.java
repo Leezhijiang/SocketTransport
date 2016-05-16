@@ -6,13 +6,22 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,10 +44,12 @@ public class SendActivity extends AppCompatActivity {
     private TextView process_desc = null;
     private Thread apOpenThread = null;
     private Button btn_send = null;
-    private Button btn_file = null;
+    private FloatingActionButton btn_file = null;
     private FileBeanSimple sendFile;
     private WifiManager wifimanager;
-    private Socket socket = new Socket();
+    private boolean isRunning = false;
+    private Socket socket =null;
+    private LinearLayout select_files = null;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -51,6 +62,12 @@ public class SendActivity extends AppCompatActivity {
                     //process_desc.setText((int)msg.obj+"%");
                     process_desc.setText(String.valueOf(msg.obj)+"%");
                     break;
+                case StaticValue.SEND_FINISHED:
+                    //改变进度条
+                    //process_desc.setText((int)msg.obj+"%");
+                    isRunning = false;
+                    break;
+
             }
             super.handleMessage(msg);
         }
@@ -64,12 +81,16 @@ public class SendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_send);
 
         setTitle("发送文件");
-        wifimanager = (WifiManager) SendActivity.this.getSystemService(WIFI_SERVICE);
-        state_desc = (TextView) findViewById(R.id.state_desc);
-        file_desc = (TextView) findViewById(R.id.file_desc);
         process_desc = (TextView) findViewById(R.id.process_desc);
-        btn_send = (Button)findViewById(R.id.btn_send);
-        btn_file = (Button) findViewById(R.id.btn_file);
+        select_files = (LinearLayout)findViewById(R.id.selcet_files);
+        wifimanager = (WifiManager) SendActivity.this.getSystemService(WIFI_SERVICE);
+        state_desc = (TextView) findViewById(R.id.stat_view);
+        file_desc = (TextView) findViewById(R.id.file_view);
+        btn_file = (FloatingActionButton) findViewById(R.id.get_file_btn);
+        /**
+         * 选择文件
+         *
+         */
         btn_file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,16 +98,28 @@ public class SendActivity extends AppCompatActivity {
                 SendActivity.this.startActivityForResult(intent, 0);
             }
         });
-        btn_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (sendFile != null) {
-                    sendFile(sendFile);
-                }
-            }
-        });
         apOpenThread = new Thread(new TestApOpenThread());
         apOpenThread.start();
+//        process_desc = (TextView) findViewById(R.id.process_desc);
+//        btn_send = (Button)findViewById(R.id.btn_send);
+//        btn_file = (Button) findViewById(R.id.btn_file);
+//        btn_file.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SendActivity.this, FileActivity.class);
+//                SendActivity.this.startActivityForResult(intent, 0);
+//            }
+//        });
+//        btn_send.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (sendFile != null) {
+//                    sendFile(sendFile);
+//                }
+//            }
+//        });
+//        apOpenThread = new Thread(new TestApOpenThread());
+//        apOpenThread.start();
     }
 
 
@@ -152,8 +185,36 @@ public class SendActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(data!=null) {
-            sendFile = (FileBeanSimple) data.getSerializableExtra("file");
-            file_desc.setText("选择文件：" + sendFile.getFile());
+            //放置一个cradview在下面的布局里
+            FileBeanSimple file = (FileBeanSimple) data.getSerializableExtra("file");
+//            file_desc.setText("选择文件：" + sendFile.getFile());
+            LinearLayout ll = (LinearLayout) View.inflate(SendActivity.this,R.layout.item_select_files,select_files);
+            Loger.takeLog(ll.getChildCount()+"");
+            View v = ll.getChildAt(ll.getChildCount()-1);
+            //FrameLayout.LayoutParams layoutParams =new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT,2);
+            //layoutParams.setMargins(10,10,10,10);
+            final TextView fileName = (TextView)v.findViewById(R.id.file_name);
+            TextView fileSize = (TextView)v.findViewById(R.id.file_size);
+            final TextView send = (TextView)v.findViewById(R.id.btn_send_file);
+            send.setTag(file);
+            fileName.setText(file.getFileName());
+            fileSize.setText(file.getFileSize());
+            send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!isRunning){//发送文件
+                        isRunning = false;
+                        Loger.takeLog("发送文件");
+                        FileBeanSimple send_file = (FileBeanSimple) v.getTag();
+                        SendActivity.this.sendFile((FileBeanSimple)v.getTag());
+                        file_desc.setText(send_file.getFileName());
+                    }else{//现在有文件正在发送
+                        Toast.makeText(SendActivity.this,"现在已有文件进行发送,请稍后再试",Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            //v.setLayoutParams(layoutParams);
+//            select_files.addView(v);
         }
     }
 

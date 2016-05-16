@@ -7,6 +7,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ public class GetActivity extends AppCompatActivity {
     private TextView state_desc = null;
     private WifiManager wifiManager = null;
     private Message msg = null;
+    private LinearLayout get_files = null;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -46,6 +49,19 @@ public class GetActivity extends AppCompatActivity {
                 case StaticValue.FILE_CHANGED:
                     file_desc.setText(String.valueOf(msg.obj));
                     break;
+                case StaticValue.GET_START://name+","+size
+                    LinearLayout ll = (LinearLayout) View.inflate(GetActivity.this,R.layout.item_get_files,get_files);
+                    Loger.takeLog(ll.getChildCount()+"");
+                    View v = ll.getChildAt(ll.getChildCount()-1);
+                    String[] values = ((String)msg.obj).split(",");
+                    //FrameLayout.LayoutParams layoutParams =new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT,2);
+                    //layoutParams.setMargins(10,10,10,10);
+                    TextView fileName = (TextView)v.findViewById(R.id.file_name);
+                    TextView fileSize = (TextView)v.findViewById(R.id.file_size);
+                    process_desc = (TextView)v.findViewById(R.id.process_view);
+                    fileName.setText(values[0]);
+                    fileSize.setText(values[1]);
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -57,9 +73,10 @@ public class GetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get);
         setTitle("接收文件");
         wifiManager = (WifiManager) this.getSystemService(WIFI_SERVICE);
-        file_desc = (TextView) findViewById(R.id.get_file_desc);
-        process_desc = (TextView) findViewById(R.id.get_process_desc);
-        state_desc = (TextView) findViewById(R.id.get_state_desc);
+        //file_desc = (TextView) findViewById(R.id.stat_view);
+        //process_desc = (TextView) findViewById(R.id.get_process_desc);
+        state_desc = (TextView) findViewById(R.id.stat_view);
+        get_files = (LinearLayout)findViewById(R.id.get_files);
         connSocketThread = new Thread(new ConnSocketThread());
         connSocketThread.start();
 
@@ -84,8 +101,8 @@ public class GetActivity extends AppCompatActivity {
 //                Loger.takeLog("链接到了错误的wifi");
 //            }
             Loger.takeLog(wifiManager.getWifiState() + "");
-            Loger.takeLog("wifi已经打开，开始连接发送端");
-            ConnManager.handlerSendMsg("wifi已经打开，开始发送端",handler,StaticValue.GET_CHANGE_DESC);
+            Loger.takeLog("wifi已经打开，开始连接");
+            ConnManager.handlerSendMsg("wifi已经打开，开始连接",handler,StaticValue.GET_CHANGE_DESC);
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

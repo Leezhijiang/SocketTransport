@@ -5,6 +5,9 @@
     android:layout_weight="8"
     android:layout_height="wrap_content">
 <ImageView
+    android:scaleType="center"
+    android:scaleX="0.7"
+    android:scaleY="0.7"
     android:layout_gravity="center"
     android:layout_weight="5"
     android:layout_width="match_parent"

@@ -76,7 +76,7 @@ public class FileActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(FileActivity.this, files.get(position).getFile().getAbsolutePath(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(FileActivity.this, files.get(position).getFile().getAbsolutePath(), Toast.LENGTH_LONG).show();
                             Intent intent = new Intent();
                             intent.putExtra("file",file);
                             setResult(0,intent);
@@ -146,11 +146,11 @@ public class FileActivity extends AppCompatActivity {
                     holder = (ViewHolder) convertView.getTag();
                 }
                 if (file.getFileType().equals("dir")){
-                    holder.item_im.setImageResource(android.support.design.R.drawable.abc_ic_star_black_36dp);
+                    holder.item_im.setImageResource(R.drawable.mdir18);
                     holder.tv_size.setText("  ");
                 }
                 else {
-                    holder.item_im.setImageResource(android.support.design.R.drawable.abc_btn_rating_star_on_mtrl_alpha);
+                    holder.item_im.setImageResource(R.drawable.mfile18);
                     holder.tv_size.setText(file.getFileSize());
                 }
                 holder.tv_name.setText(file.getFileName());

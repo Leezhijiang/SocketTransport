@@ -11,4 +11,7 @@
         <attr name="uText" format="string"></attr>
         <attr name="dText" format="string"></attr>
     </declare-styleable>
+    <declare-styleable name="MaterialProcess">
+        <attr name="process_color" format="color"></attr>
+    </declare-styleable>
 </resources>

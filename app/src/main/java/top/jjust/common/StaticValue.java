@@ -53,4 +53,8 @@ public class StaticValue {
     //buffered大小
     public static final int GET_BUFFER_SIZE  = 1024*1024*6;
     public static final int SEND_BUFFER_SIZE  = 1024*1024;
+    //send发送完毕一个文件
+    public static final int SEND_FINISHED = 11;
+    //get开始接收一个文件
+    public static final int GET_START = 12;
 }

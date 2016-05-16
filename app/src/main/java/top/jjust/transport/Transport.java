@@ -54,7 +54,7 @@ public class Transport {
                 ConnManager.handlerSendMsg(new DecimalFormat("###0.00").format((sendSize / file.getRawSize()) * 100), handler, StaticValue.PROCESS_CHANGED);
                 os.flush();
             }
-
+            ConnManager.handlerSendMsg(file,handler,StaticValue.SEND_FINISHED);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -156,6 +156,7 @@ public class Transport {
                 }
                 name = values[0];
                 size = new Double(values[1]);
+                ConnManager.handlerSendMsg(name+","+size,handler,StaticValue.GET_START);
                 ConnManager.handlerSendMsg("正在接收文件", handler, StaticValue.GET_CHANGE_DESC);
                 ConnManager.handlerSendMsg(name,handler,StaticValue.FILE_CHANGED);
                 //新建文件

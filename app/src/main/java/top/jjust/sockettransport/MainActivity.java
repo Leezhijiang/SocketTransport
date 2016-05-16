@@ -5,11 +5,13 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -38,23 +40,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        MaterialSwitch btn = (MaterialSwitch) this.findViewById(R.id.btn_send);
-
-        btn.setOnUpClickListener(new MaterialSwitch.OnUpClickListener() {
-                                     @Override
-                                     public void onclick() {
-                                         //打开wifi热点_ok
+        LinearLayout send = (LinearLayout) findViewById(R.id.send);
+        LinearLayout get = (LinearLayout) findViewById(R.id.get);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // 打开wifi热点_ok
                                          if (WifiAPControl.openWifiAP((WifiManager) MainActivity.this.getSystemService(WIFI_SERVICE))) {
                                              //跳转页面
                                              Intent intent = new Intent(MainActivity.this, SendActivity.class);
                                              MainActivity.this.startActivity(intent);
                                          }
-                                     }
-                                 }
-        );
-        btn.setOnDownClickListener(new MaterialSwitch.OnDownClickListener() {
+            }
+        });
+        get.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onclick() {
+            public void onClick(View v) {
                 // 链接wifi
                 if (WifiControl.connWIFI((WifiManager) MainActivity.this.getSystemService(WIFI_SERVICE))) {
                     //跳转页面
@@ -63,6 +64,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+//        MaterialSwitch btn = (MaterialSwitch) this.findViewById(R.id.btn_send);
+//
+//        btn.setOnUpClickListener(new MaterialSwitch.OnUpClickListener() {
+//                                     @Override
+//                                     public void onclick() {
+//                                         //打开wifi热点_ok
+//                                         if (WifiAPControl.openWifiAP((WifiManager) MainActivity.this.getSystemService(WIFI_SERVICE))) {
+//                                             //跳转页面
+//                                             Intent intent = new Intent(MainActivity.this, SendActivity.class);
+//                                             MainActivity.this.startActivity(intent);
+//                                         }
+//                                     }
+//                                 }
+//        );
+//        btn.setOnDownClickListener(new MaterialSwitch.OnDownClickListener() {
+//            @Override
+//            public void onclick() {
+//                // 链接wifi
+//                if (WifiControl.connWIFI((WifiManager) MainActivity.this.getSystemService(WIFI_SERVICE))) {
+//                    //跳转页面
+//                    Intent intent = new Intent(MainActivity.this, GetActivity.class);
+//                    MainActivity.this.startActivity(intent);
+//                }
+//            }
+//        });
         // MaterialSwitch btnGet = (MaterialSwitch)this.findViewById(R.id.btn_get);
 //        btn.setOnClickListener(new View.OnClickListener() {
 //            @Override
